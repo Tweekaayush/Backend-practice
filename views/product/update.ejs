@@ -1,0 +1,8 @@
+<%-include("../layout/header.ejs")%>
+    <form action="/movies/<%=movie.id%>?_method=PUT" method="POST">
+        <input type="text" name="title" id="" value=<%=movie.title%>>
+        <input type="number" name="score" id="" value=<%=movie.score%>>
+        <input type="text" name="rating" id="" value=<%=movie.rating%>>
+        <input type="submit" value="Update">
+    </form>
+<%-include("../layout/footer.ejs")%>

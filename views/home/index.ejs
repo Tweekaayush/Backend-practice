@@ -1,0 +1,31 @@
+<%- include("../layout/header.ejs") %>
+    <div class="container">
+        <form action="/submit" method="post">
+            <input type="text" name="title" id="" placeholder="Title">
+            <input type="number" name="score" id="" placeholder="Score">
+            <input type="text" name="rating" id="" placeholder="Rating">
+            <input type="submit" value="Add">
+        </form>
+        <div class="movieContainer">
+            <h1>Movie List</h1>
+            <div class="categories">
+                <a href="/">All</a>
+                <a href="/?rating=PG-13">PG-13</a>
+                <a href="/?rating=R">R</a>
+            </div>
+            <div class="cardContainer">
+                <% movies.map((movie)=>{ %>
+                    <div class="card" onClick="btnClick(`<%=movie.id%>`)">
+                        <h2> <%=movie.title%> </h2>
+                        <p> <%=movie.score%> </p>
+                        <p> <%=movie.rating%> </p>
+                        <button onClick="handleUpdate(`<%=movie.id%>`)">Update</button>
+                        <form action="/movies/<%=movie.id%>?_method=DELETE" method="POST">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </div>
+                <%})%>
+            </div> 
+        </div>
+    </div>
+<%- include("../layout/footer.ejs") %>

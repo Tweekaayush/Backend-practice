@@ -1,0 +1,15 @@
+
+    <script>
+        function btnClick(id) {
+            event.stopPropagation()
+            console.log(id)
+            window.location.href = `/movies/${id}`
+        }
+        function handleUpdate(id){
+            event.stopPropagation()
+            console.log(id)
+            window.location.href = `/movies/${id}/edit`
+        }
+    </script>
+</body>
+</html>
