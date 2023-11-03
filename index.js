@@ -3,6 +3,8 @@ const dotenv = require("dotenv")
 const connectDatabase = require("./config/database")
 const Movie = require("./models/movieModel")
 const methodOverride = require("method-override")
+const AppError = require("./utils/AppError")
+const catchAsyncErrors= require("./middleware/catchAsyncErrors")
 
 
 const app = express();
@@ -15,15 +17,7 @@ app.use(methodOverride("_method"))
 
 connectDatabase();
 
-const addMovie = async(req,res) => {
-    const movie = await Movie.create(req);
-}
-// const getAllMovies = async(req,res) => {
-    
-//     return movies
-// }
-
-app.get("/", async(req,res)=>{
+app.get("/", async(req, res, next)=>{
     const movies = await Movie.find(req.query);
     res.render("home/index.ejs", {movies: movies})
 })
@@ -55,9 +49,18 @@ app.delete("/movies/:id", async(req, res)=>{
     res.redirect("/")
 })
 
-app.post("/submit", (req, res)=>{
-    addMovie(req.body)
+app.post("/submit", catchAsyncErrors(async(req, res, next)=>{
+    const movie = await Movie.create(req.body);
     res.redirect("/")
+}))
+
+app.get('/admin', (req, res, next)=>{
+    return next(new AppError('You are not an Admin', 403))
+})
+
+app.use((err, req, res, next)=>{
+    const {status = 500, message="Something went wrong!"} = err
+    res.status(status).send(message)
 })
 
 app.listen(port, ()=>{
